@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 [image1]: ./writeup_img/car_noncar.png
 [image2]: ./writeup_img/HOG_example.png
 [image3]: ./writeup_img/one_scale.png
-[image4]: ./writeup_img/two_scales.jpg
+[image4]: ./writeup_img/two_scales.png
 [image6]: ./writeup_img/labels_map.png
 [image7]: ./writeup_img/output_bboxes.png
 [image8]: ./writeup_img/heatmap1.png
@@ -53,7 +53,7 @@ I trained a linear SVM using spatial features, histogram features and HOG featur
 `hist_bins = 32`
 `hog_channel = "ALL"`
 
-The code for this step is contained in the 6 code cell of the IPython notebook in function `train_classifier()`
+The code for this step is contained in the 6 code cell of the IPython notebook in function `train_classifier()`. The HOG features extracted from the training data have been used to train a SVM linear kernel classifier. Features should be scaled to zero mean and unit variance before training the classifier.
 
 ### Sliding Window Search
 
@@ -79,8 +79,6 @@ Ultimately I searched on two scale `scale = [1.0, 1.5]` using YCrCb 3-channel HO
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 [![link to my video result](https://img.youtube.com/vi/GAzoAtJP110/0.jpg)](https://youtu.be/GAzoAtJP110)
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
-
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
@@ -91,7 +89,7 @@ Here's an example result showing the heatmap from a series of frames of video, t
 ![alt text][image9]
 ![alt text][image10]
 
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
+### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all three frames:
 ![alt text][image6]
 
 ### Here the resulting bounding boxes are drawn onto the last frame in the series:
@@ -101,12 +99,10 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ---
 
-###Discussion
-
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+### Discussion
 
 The main challenge for this project was parameter tuning, mostly to reduce the number of false positives in the video. Even though the HOG+SVM classifier reported good results after training, it did not necessarily mean good results in the overall vehicle detection task.
 
-It took me some time to figure out what size of scaling windows to use, and how many of them. When I increased number of windows, I had to tune up magnitude of threshold. Finally I endend up with two windows at scale 1.0 and 1.5. I don't separete them to use smaller one on upper side of image but it could increase speed of the detector, especially when lane detection is done at the same time!
+It took me some time to figure out what size of scaling windows to use, and how many of them. When I increased number of windows, I had to tune up magnitude of threshold. Finally I ended up with two windows at scale 1.0 and 1.5. I don't separete them to use smaller one on upper side of image but it could increase speed of the detector, especially when lane detection is done at the same time!
 
 One final potential areas were the current vehicle detection pipeline could fail is when two cars are very close to each other. Sometimes model treated them as one big vehicle.
