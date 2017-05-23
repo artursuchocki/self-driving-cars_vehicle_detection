@@ -65,12 +65,14 @@ I chose `window_size=(64,64)` at `scale = [1.5]` and an overlap percentage of 0.
 
 I found this gave me reliable detections with multiple detected bounding boxes on vehicles, i.e. the density of detections around vehicles is high, relative to non-vehicle areas of the image. This allows me to create a high-confidence prediction of vehicles in my heat map (more details later) and reject potential false positives.
 
+Boxes from one window:
 ![alt text][image3]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 Ultimately I searched on two scale `scale = [1.0, 1.5]` using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example image:
 
+Boxes from two windows:
 ![alt text][image4]
 ---
 
